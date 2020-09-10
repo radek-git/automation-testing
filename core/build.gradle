@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+    compile group: 'org.assertj', name: 'assertj-core', version: '3.16.1'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '1.1.1'
+    testImplementation 'io.cucumber:cucumber-java8:5.0.0-RC4'
+    testImplementation 'io.cucumber:cucumber-junit:5.0.0-RC4'
+    compile group: 'com.codeborne', name: 'selenide', version: '5.12.2'
+    testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+}
+
+task cucumber() {
+    dependsOn assemble, compileTestJava
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--glue', 'gradle.cucumber', 'src/test/resources']
+        }
+    }
+}

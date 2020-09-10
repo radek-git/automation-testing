@@ -1,0 +1,5 @@
+rootProject.name = 'automation-testing'
+include 'core'
+include 'github-com'
+include 'mockito-shop'
+
